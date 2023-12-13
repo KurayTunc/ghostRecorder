@@ -1,0 +1,62 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GhostRecorder : MonoBehaviour
+{
+      [System.Serializable]
+      public class GhostFrame
+      {
+            public float timeStamp;
+            public Vector3 position;
+            public Quaternion rotation;
+      }
+
+      public bool isRecording = false;
+      public float recordFrequency = 5f; // Kayıt frekansı (örneğin, saniyede 5 kare)
+
+      private List<GhostFrame> ghostFrames = new List<GhostFrame>();
+      private float timer;
+
+      private void Update()
+      {
+            if (isRecording)
+            {
+                  Record();
+            }
+      }
+
+      private void Record()
+      {
+            timer += Time.fixedDeltaTime;
+
+            if (timer >= 1 / recordFrequency)
+            {
+                  GhostFrame frame = new GhostFrame();
+                  frame.timeStamp = Time.time;
+                  frame.position = transform.position;
+                  frame.rotation = transform.rotation;
+
+                  ghostFrames.Add(frame);
+
+                  timer = 0f;
+            }
+      }
+
+      public void StartRecording()
+      {
+            isRecording = true;
+            ghostFrames.Clear();
+      }
+
+      public void StopRecording()
+      {
+            isRecording = false;
+      }
+
+      public List<GhostFrame> GetGhostFrames()
+      {
+            return ghostFrames;
+      }
+
+}
