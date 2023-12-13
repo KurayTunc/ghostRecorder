@@ -1,0 +1,45 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GhostReplayer : MonoBehaviour
+{
+      public GhostRecorder ghostRecorder;
+      public bool startMove;
+      private int currentFrameIndex = 0;
+      public List<GhostRecorder.GhostFrame> ghostFrames;
+
+      private void Start()
+      {
+            ghostFrames = ghostRecorder.GetGhostFrames();
+      }
+
+      private void Update()
+      {
+            Replay();
+      }
+
+
+      private void Replay()
+      {
+            if (currentFrameIndex < ghostFrames.Count && startMove == true)
+            {
+                  GhostRecorder.GhostFrame frame = ghostFrames[currentFrameIndex];
+                  transform.position = frame.position;
+                  transform.rotation = frame.rotation;
+
+                  currentFrameIndex++;
+            }
+      }
+
+      public void StartReplay()
+      {
+            currentFrameIndex = 0;
+            startMove = true;
+      }
+
+      public void StopReplay()
+      {
+            startMove = false;
+      }
+}
